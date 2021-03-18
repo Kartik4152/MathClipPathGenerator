@@ -1,0 +1,14 @@
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
+}
+.controlButtons{
+  display:flex;
+  flex-direction:row;
+  flex-wrap: wrap;
+  gap:1em;
+  align-items: center;
+  justify-content: center;
+}

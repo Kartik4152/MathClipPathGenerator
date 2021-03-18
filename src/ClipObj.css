@@ -1,0 +1,12 @@
+.clipThis {
+  background-color: #3498db;
+  width: 80vw;
+  height: 20vh;
+}
+
+@media screen and (min-width:48em)
+{
+  .clipThis{
+    height:40vh;
+  }
+}
