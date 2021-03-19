@@ -25,3 +25,11 @@ input[type="button"]{
   font-weight: bold;
   outline:none;
 }
+
+@media screen and  (min-width:48em)
+{
+  .controlsContainer{
+    flex-direction: row;
+    gap:5em;
+  }
+}

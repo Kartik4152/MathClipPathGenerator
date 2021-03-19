@@ -1,7 +1,8 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import './TrigonometricControls.css';
 
 const TrigonometricControls=()=>{
+    const [curFunc,setCurFunc]=useState('');
     const [controller,setController]=useState({
         step:{
             value:0.1,
@@ -27,9 +28,15 @@ const TrigonometricControls=()=>{
             max:360,
             step:0.5
         },
+        vertical:{
+            value:50,
+            min:0,
+            max:100,
+            step:0.5
+        }
     })
 
-    const makeClip=(e)=>{
+    const makeClip=()=>{
     Math['sec']=(rad)=>{
         return 1/Math.cos(rad);
     }
@@ -45,7 +52,8 @@ const TrigonometricControls=()=>{
         //so deg goes from 0 to 360
         deg=x*controller.step.value*3.6*Math.PI/180;
         phase=controller.phase.value*Math.PI/180;
-        points.push([x*controller.step.value,50+controller.amplitude.value*Math[e.target.id](controller.frequency.value*deg+phase)]);
+        console.log(controller.vertical.value);
+        points.push([x*controller.step.value,Number(controller.vertical.value)+controller.amplitude.value*Math[curFunc](controller.frequency.value*deg+phase)]);
         x++;
         total--;
     }
@@ -55,6 +63,7 @@ const TrigonometricControls=()=>{
         clipString+=`${point[0]}% ${point[1]}%, `;
     }
     clipString+="100% 100%, 0% 100%)";
+    document.querySelector('#cssArea').innerText=clipString;
     document.querySelector('.clipThis').style.clipPath=clipString;
     }
     const clickHandler=(e,name)=>{
@@ -73,7 +82,7 @@ const TrigonometricControls=()=>{
                         value:((Number(prev[name]['value'])-prev[name]['step'])<prev[name]['min']?prev[name]['min']:Number(prev[name]['value'])-prev[name]['step']).toFixed(1)}
                 };
         })
-    }
+    };
     
     const changeHandler=(e)=>{
         setController((prev)=>{
@@ -83,14 +92,20 @@ const TrigonometricControls=()=>{
             })
         }
         )
-    }
+    };
+
+    useEffect(()=>{
+        if(curFunc!=='')
+        makeClip();
+    });
+
     return(
         <>
         {/* Todo : Fix Button  Hold */}
         <div className='controlButtons'>
-            <input type="button" value="Sin(x)" id="sin" onClick={makeClip}/>
-            <input type="button" value="Tan(x)" id="tan" onClick={makeClip}/>
-            <input type="button" value="Sec(x)" id="sec" onClick={makeClip}/>
+            <input type="button" value="Sin(x)" id="sin" onClick={(e)=>setCurFunc(e.target.id)}/>
+            <input type="button" value="Tan(x)" id="tan" onClick={(e)=>setCurFunc(e.target.id)}/>
+            <input type="button" value="Sec(x)" id="sec" onClick={(e)=>setCurFunc(e.target.id)}/>
         </div>
         <div className='controls'>
             <label htmlFor="step">Step size : {controller.step.value}%</label>
@@ -117,6 +132,16 @@ const TrigonometricControls=()=>{
                 <input type="range" name="phase" id="phase" min={controller.phase.min} max={controller.phase.max} step={controller.phase.step} value={controller.phase.value} onChange={changeHandler} />
                 <input type="button" value="+" onClick={(e)=>clickHandler(e,'phase')}/>
             </div>
+            <label htmlFor="vertical">Vertical Position : {controller.vertical.value}</label>
+            <div>
+                <input type="button" value="-" onClick={(e)=>clickHandler(e,'vertical')}/>
+                <input type="range" name="vertical" id="vertical" min={controller.vertical.min} max={controller.vertical.max} step={controller.vertical.step} value={controller.vertical.value} onChange={changeHandler} />
+                <input type="button" value="+" onClick={(e)=>clickHandler(e,'vertical')}/>
+            </div>
+        </div>
+        <div id='txtarea'>
+        <h3>Css : </h3>
+        <textarea name="cssArea" id="cssArea" cols="30" rows="10"></textarea>
         </div>
         </>
     )
