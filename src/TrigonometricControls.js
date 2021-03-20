@@ -13,7 +13,7 @@ const TrigonometricControls=()=>{
         frequency:{
             value:1,
             min:0.1,
-            max:1000,
+            max:500,
             step:0.1
         },
         amplitude:{
@@ -53,7 +53,7 @@ const TrigonometricControls=()=>{
         deg=x*controller.step.value*3.6*Math.PI/180;
         phase=controller.phase.value*Math.PI/180;
         console.log(controller.vertical.value);
-        points.push([x*controller.step.value,Number(controller.vertical.value)+controller.amplitude.value*Math[curFunc](controller.frequency.value*deg+phase)]);
+        points.push([x*controller.step.value,controller.vertical.value+controller.amplitude.value*Math[curFunc](controller.frequency.value*deg+phase)]);
         x++;
         total--;
     }
@@ -88,7 +88,7 @@ const TrigonometricControls=()=>{
         setController((prev)=>{
             return({
                 ...prev,
-                [e.target.id]:{...prev[e.target.id],value:e.target.value},
+                [e.target.id]:{...prev[e.target.id],value:Number(e.target.value)},
             })
         }
         )
