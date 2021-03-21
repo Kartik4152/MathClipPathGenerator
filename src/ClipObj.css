@@ -2,9 +2,10 @@
   background-color: #3498db;
   width: 80vw;
   height: 20vh;
-  border: 1px solid black;
 }
-
+#clipcontainer {
+  border: 2px solid black;
+}
 @media screen and (min-width: 48em) {
   .clipThis {
     height: 40vh;
